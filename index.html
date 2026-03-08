@@ -1,48 +1,246 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room369 – Temporary Closure</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
-    body {
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-        color: white;
-        overflow: hidden;
-    }
+<title>Something For You</title>
 
-    .container {
-        text-align: center;
-        padding: 40px 30px;
-        max-width: 600px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 20px;
-        backdrop-filter: blur(15px);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-        animation: fadeIn 1.5s ease;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
 
-    h1 {
-        font-size: 2.8rem;
-        letter-spacing: 2px;
-        margin-bottom: 10px;
-    }
+<style>
 
-    .divider {
-        width: 60px;
+body{
+margin:0;
+font-family:'Nunito',sans-serif;
+background:linear-gradient(135deg,#ffd6f3,#d7c6ff);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+text-align:center;
+overflow-x:hidden;
+overflow-y:auto;
+color:#444;
+}
+
+/* landing page */
+
+#landing{
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:20px;
+}
+
+.teddy{
+font-size:110px;
+cursor:pointer;
+animation:bounce 2s infinite;
+transition:0.2s;
+}
+
+.teddy:active{
+transform:scale(1.15);
+}
+
+@keyframes bounce{
+0%{transform:translateY(0)}
+50%{transform:translateY(-10px)}
+100%{transform:translateY(0)}
+}
+
+.taptext{
+font-size:20px;
+margin-top:10px;
+color:#7b5de6;
+}
+
+/* main content */
+
+#main{
+display:none;
+max-width:650px;
+padding:30px 20px 60px 20px;
+}
+
+h1{
+font-size:42px;
+color:#7b5de6;
+margin-bottom:10px;
+}
+
+h2{
+color:#ff6ab0;
+margin-bottom:25px;
+}
+
+button{
+background:#ff85c2;
+border:none;
+color:white;
+padding:14px 26px;
+border-radius:25px;
+font-size:16px;
+cursor:pointer;
+margin:10px;
+transition:0.2s;
+}
+
+button:active{
+transform:scale(0.95);
+background:#ff6ab0;
+}
+
+#message{
+display:none;
+margin-top:20px;
+font-size:18px;
+line-height:1.6;
+padding-bottom:40px;
+}
+
+/* hearts */
+
+.heart{
+position:absolute;
+font-size:22px;
+animation:rise 3s linear forwards;
+pointer-events:none;
+}
+
+@keyframes rise{
+0%{opacity:1;transform:translateY(0)}
+100%{opacity:0;transform:translateY(-180px)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="landing">
+
+<div class="teddy" onclick="enter()">🧸</div>
+
+<div class="taptext">
+Tap the plushie
+</div>
+
+</div>
+
+<div id="main">
+
+<h1>Happy 20th Birthday Nginaa💋</h1>
+<h2>To my motherfucking Best Girl!!</h2>
+
+<button onclick="reveal()">Click to get a man!😝😂</button>
+
+<button id="voiceBtn" onclick="playVoice()">me to you😙</button>
+
+<div id="message">
+
+You officially survived 20 years on this chaotic planet.
+
+And somehow you're still one of the most kind, funny, and amazing people I know.
+
+Thank you for being the friend who makes life brighter and way more fun. I feel like there wouldn't be this me 
+if I did not meet you, I fucking adore you, and sometimes I find myself 
+getting lost in your presence.That's just a peek of how much you mean to me,'
+I would honestly take a bullet for Ngina' my shit brain once thought!!And On this grand day, Ngina's Day, I find it in my heart
+ that I want you to be the happiest girl that I ever 
+crossed paths with. Anyways!,
+I hope this year brings you everything you dream about and more.
+
+💜 Happy 20th Birthday 💜
+
+I Love you😙
+-Manuu
+
+</div>
+
+</div>
+
+<audio id="voice">
+<source src="voice.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+function enter(){
+
+document.getElementById("landing").style.display="none";
+document.getElementById("main").style.display="block";
+
+}
+
+function reveal(){
+
+document.getElementById("message").style.display="block";
+spawnHearts();
+
+}
+
+function playVoice(){
+
+let audio=document.getElementById("voice");
+let btn=document.getElementById("voiceBtn");
+
+audio.play();
+btn.innerText="Playing Message...";
+
+audio.onended=function(){
+btn.innerText="Message Played 💜";
+}
+
+}
+
+function spawnHearts(){
+
+for(let i=0;i<18;i++){
+
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="💖";
+
+heart.style.left=Math.random()*window.innerWidth+"px";
+heart.style.top=(window.innerHeight-80)+"px";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),3000);
+
+}
+
+}
+
+/* mobile + desktop heart interaction */
+
+document.addEventListener("click",spawnTapHeart);
+document.addEventListener("touchstart",spawnTapHeart);
+
+function spawnTapHeart(e){
+
+let x = e.touches ? e.touches[0].pageX : e.pageX;
+let y = e.touches ? e.touches[0].pageY : e.pageY;
+
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="💜";
+
+heart.style.left=x+"px";
+heart.style.top=y+"px";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),3000);
+
+}
+
+</script>
+
+</body>
+</html>        width: 60px;
         height: 3px;
         background: gold;
         margin: 20px auto;
@@ -125,3 +323,4 @@
     </div>
 </body>
 </html>
+
