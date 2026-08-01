@@ -349,7 +349,7 @@
       animation: typeIn 0.8s ease 1.2s forwards;
     }
 
-    /* ——— FLOATING EMOJIS (passive & tap) ——— */
+    /* ——— FLOATING EMOJIS (passive) ——— */
     .float-emoji {
       position: fixed;
       pointer-events: none;
@@ -402,7 +402,7 @@
 </head>
 <body>
 
-  <!-- ===== 3D CANVAS (background) ===== -->
+  <!-- ===== 3D CANVAS ===== -->
   <div id="canvas-container"></div>
 
   <!-- ===== LANDING GIFT ===== -->
@@ -423,7 +423,6 @@
 
   <!-- ===== UI OVERLAY ===== -->
   <div id="ui-overlay">
-    <!-- ===== MAIN CARD ===== -->
     <div id="main-card">
       <div class="card-header">
         <div class="badge-day">🌸 pour toi, mon amour</div>
@@ -434,9 +433,7 @@
       <button class="btn-primary" id="revealBtn">💌 Read your letter, baby</button>
 
       <div id="message-box">
-        <div class="poem-container" id="poemContainer">
-          <!-- lines injected by JS -->
-        </div>
+        <div class="poem-container" id="poemContainer"></div>
         <div class="signature">— Manu</div>
       </div>
     </div>
@@ -649,13 +646,12 @@
     revealBtn.addEventListener('click', revealMessage);
 
     // =============================================
-    // 3. EMOJI SPAWNER (tap & passive)
+    // 3. EMOJI SPAWNER (tap + passive)
     // =============================================
     function spawnEmoji(emoji, x, y, size) {
       const el = document.createElement('div');
       el.className = 'float-emoji';
       el.textContent = emoji;
-      // Random horizontal drift and rotation
       const drift = (Math.random() - 0.5) * 180;
       const rot = (Math.random() - 0.5) * 60;
       el.style.setProperty('--tx', drift + 'px');
@@ -667,33 +663,30 @@
       setTimeout(() => el.remove(), 3500);
     }
 
-    // Passive floating emojis (rises from the bottom)
+    // Passive floating from bottom
     const passiveEmojis = ['💋', '🤗', '✨', '🌸', '💕', '❤️', '💖', '🎀'];
 
     function spawnPassiveEmoji() {
       const emoji = passiveEmojis[Math.floor(Math.random() * passiveEmojis.length)];
       const x = Math.random() * window.innerWidth;
-      const y = window.innerHeight + 20; // start just below the screen
+      const y = window.innerHeight + 20;
       const size = 24 + Math.random() * 28;
       spawnEmoji(emoji, x, y, size);
     }
 
-    // Start passive floating after the page loads
     function startPassiveFloating() {
-      // Spawn a few immediately
       for (let i = 0; i < 6; i++) {
         setTimeout(spawnPassiveEmoji, i * 200);
       }
-      // Then keep spawning at random intervals (2 to 5 seconds)
       setInterval(() => {
-        const count = 1 + Math.floor(Math.random() * 2); // 1 or 2 at a time
+        const count = 1 + Math.floor(Math.random() * 2);
         for (let i = 0; i < count; i++) {
           setTimeout(spawnPassiveEmoji, i * 150);
         }
       }, 2800 + Math.random() * 2200);
     }
 
-    // Tap anywhere (not on buttons) → spawn a heart
+    // Tap anywhere (not on buttons/card/landing) → heart
     document.addEventListener('click', (e) => {
       const target = e.target;
       if (target.closest('button') || target.closest('#main-card') || target.closest('#landing')) return;
